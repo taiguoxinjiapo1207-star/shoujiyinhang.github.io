@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>⏰ 好习惯银行 · 完整成长版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f0f8ff 0%, #d9e9fa 100%);
+            min-height: 100vh;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .app {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 56px 56px 44px 44px;
+            box-shadow: 0 30px 45px -20px #1f4b77, 0 2px 0 1px rgba(255,255,255,0.6) inset;
+            padding: 24px 18px 28px;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        /* 头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px 10px;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(130deg, #193f5c, #2e6290);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .reset-chip {
+            background: #fde9cc;
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-weight: 600;
+            color: #785e38;
+            box-shadow: 0 4px 0 #dbbd91;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid #fff2dd;
+        }
+        .reset-chip:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #dbbd91;
+        }
+        .subhead {
+            background: #cfe2f2d0;
+            border-radius: 40px;
+            padding: 12px 25px;
+            margin: 5px 0 25px;
+            color: #003057;
+            font-size: 1.1rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            border-left: 6px solid #3d77a3;
+        }
+        /* 仪表盘 */
+        .gauge {
+            background: #fffffff0;
+            border-radius: 60px;
+            padding: 24px 20px;
+            box-shadow: 0 12px 22px -10px #2e5f87;
+            margin-bottom: 25px;
+        }
+        .earned-row {
+            background: #d4e7ff;
+            border-radius: 50px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .earned-label {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #113753;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .earned-num {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #00284d;
+            line-height: 1;
+        }
+        .base-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: #ecf3fb;
+            border-radius: 50px;
+            padding: 12px 22px;
+        }
+        .base-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .pill {
+            background: #2e608b;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: inset 0 -2px 0 #173f60;
+        }
+        .pill.green {
+            background: #3f7a5c;
+            box-shadow: inset 0 -2px 0 #235f3e;
+        }
+        .pill.warning {
+            background: #be7c4b;
+        }
+        .max-tip {
+            font-size: 0.95rem;
+            color: #1d4a75;
+            font-weight: 500;
+            background: #ffffffb0;
+            padding: 6px 18px;
+            border-radius: 50px;
+        }
+        /* 6大模块网格 */
+        .module-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .module-card {
+            flex: 1 1 160px;
+            background: white;
+            border-radius: 40px;
+            padding: 18px 12px 16px;
+            box-shadow: 0 12px 18px -12px #2b5172, 0 3px 0 0 #ffffff inset;
+        }
+        .module-title {
+            font-size: 1.4rem;
+            font-weight: 650;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #1f405b;
+            margin-bottom: 14px;
+            padding-left: 6px;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f2f8ff;
+            border-radius: 50px;
+            padding: 9px 12px;
+            margin-bottom: 10px;
+        }
+        .task-name {
+            font-size: 0.9rem;
+            max-width: 110px;
+            font-weight: 500;
+        }
+        .task-score {
+            font-weight: 700;
+            color: #1a5d8f;
+            min-width: 32px;
+            text-align: center;
+        }
+        .btn-group {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-group button {
+            width: 36px;
+            height: 36px;
+            border-radius: 40px;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: white;
+            color: #1b4e78;
+            box-shadow: 0 4px 6px #0000001a;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #c5d7ec;
+        }
+        .btn-group .minus {
+            background: #ffede5;
+            color: #bb5f32;
+            border-color: #f8cbb2;
+        }
+        .btn-group button:active {
+            transform: scale(0.9);
+        }
+        .btn-group button:disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        /* 惩罚专区 */
+        .penalty-block {
+            background: #efe0d1;
+            border-radius: 42px;
+            padding: 22px 16px;
+            margin: 20px 0;
+        }
+        .penalty-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #794f2d;
+            margin-bottom: 15px;
+        }
+        /* 手机控制区  + 最大1小时限制 */
+        .phone-zone {
+            background: #c5d9ee;
+            border-radius: 70px;
+            padding: 20px 22px;
+            margin: 20px 0 12px;
+        }
+        .phone-stats {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffffb0;
+            border-radius: 60px;
+            padding: 12px 22px;
+            margin-bottom: 16px;
+        }
+        .used-display {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #103753;
+        }
+        .limit-note {
+            background: #fee2b5;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #884e20;
+        }
+        .play-btn {
+            background: #39855c;
+            border: none;
+            width: 100%;
+            padding: 18px 0;
+            border-radius: 70px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 0 #1f5a39, 0 6px 18px #1d4e32;
+            cursor: pointer;
+            transition: 0.05s;
+        }
+        .play-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0 #1f5a39, 0 10px 20px #1f4d33;
+        }
+        .play-btn:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 6px 0 #1f5a39;
+            pointer-events: none;
+        }
+        .reset-used {
+            background: #e5dac0;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-weight: 600;
+            color: #4e5d47;
+            margin-left: 12px;
+            cursor: pointer;
+        }
+        .log-box {
+            background: #dce7f2f0;
+            border-radius: 44px;
+            padding: 18px 22px;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #1b3f5a;
+        }
+        .log-item {
+            padding: 5px 0;
+            border-bottom: 1px dashed #9cb5d1;
+        }
+        .footer-small {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 8px 0;
+            color: #2d577b;
+        }
+    </style>
+</head>
+<body>
+<div class="app" id="habitBank">
+    <!-- 头部 -->
+    <div class="header">
+        <h1>🌱 习惯银行 <span style="font-size:1.7rem;">⭐</span></h1>
+        <div class="reset-chip" @click="resetDay">🌅 新的一天</div>
+    </div>
+    <div class="subhead">⚡ 基础10分钟 · 每日上限60分钟 · 洗漱/睡觉/起床/礼貌已加入</div>
+
+    <!-- 仪表盘 -->
+    <div class="gauge">
+        <div class="earned-row">
+            <span class="earned-label"><span>💰</span> 今日赚取</span>
+            <span class="earned-num">{{ totalEarned }}</span> 分钟
+        </div>
+        <div class="base-bar">
+            <div class="base-item"><span class="pill">📋 基础 10'</span></div>
+            <div class="base-item"><span class="pill green">🎮 可用 {{ availableMinutes }}'</span></div>
+            <div class="max-tip">⏳ 上限 60 分钟/天</div>
+        </div>
+    </div>
+
+    <!-- 六大模块：作业/吃饭/洗漱/睡觉/起床/礼貌 (奖励) -->
+    <div class="module-grid">
+        <!-- 作业模块 -->
+        <div class="module-card">
+            <div class="module-title">📚 作业</div>
+            <div v-for="t in tasks.homework" :key="t.key" class="task-item">
+                <span class="task-name">{{ t.name }}</span>
+                <span class="task-score">{{ t.score }}</span>
+                <div class="btn-group">
+                    <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                    <button @click="adjust(t, 1)">+</button>
+                </div>
+            </div>
+        </div>
+        <!-- 吃饭模块 -->
+        <div class="module-card">
+            <div class="module-title">🍚 吃饭</div>
+            <div v-for="t in tasks.meal" :key="t.key" class="task-item">
+                <span class="task-name">{{ t.name }}</span>
+                <span class="task-score">{{ t.score }}</span>
+                <div class="btn-group">
+                    <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                    <button @click="adjust(t, 1)">+</button>
+                </div>
+            </div>
+        </div>
+        <!-- 洗漱模块 (新增) -->
+        <div class="module-card">
+            <div class="module-title">🧼 洗漱</div>
+            <div v-for="t in tasks.hygiene" :key="t.key" class="task-item">
+                <span class="task-name">{{ t.name }}</span>
+                <span class="task-score">{{ t.score }}</span>
+                <div class="btn-group">
+                    <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                    <button @click="adjust(t, 1)">+</button>
+                </div>
+            </div>
+        </div>
+        <!-- 睡觉模块 (新增) -->
+        <div class="module-card">
+            <div class="module-title">😴 睡觉</div>
+            <div v-for="t in tasks.sleep" :key="t.key" class="task-item">
+                <span class="task-name">{{ t.name }}</span>
+                <span class="task-score">{{ t.score }}</span>
+                <div class="btn-group">
+                    <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                    <button @click="adjust(t, 1)">+</button>
+                </div>
+            </div>
+        </div>
+        <!-- 起床模块 (新增) -->
+        <div class="module-card">
+            <div class="module-title">⏰ 起床</div>
+            <div v-for="t in tasks.wakeup" :key="t.key" class="task-item">
+                <span class="task-name">{{ t.name }}</span>
+                <span class="task-score">{{ t.score }}</span>
+                <div class="btn-group">
+                    <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                    <button @click="adjust(t, 1)">+</button>
+                </div>
+            </div>
+        </div>
+        <!-- 礼貌模块 (新增) -->
+        <div class="module-card">
+            <div class="module-title">🤝 礼貌</div>
+            <div v-for="t in tasks.politeness" :key="t.key" class="task-item">
+                <span class="task-name">{{ t.name }}</span>
+                <span class="task-score">{{ t.score }}</span>
+                <div class="btn-group">
+                    <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                    <button @click="adjust(t, 1)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 惩罚扣分区 (新增相关惩罚) -->
+    <div class="penalty-block">
+        <div class="penalty-title"><span>⚠️</span> 扣分项 (磨蹭/不讲礼貌/晚起等)</div>
+        <div v-for="t in tasks.penalty" :key="t.key" class="task-item" style="background:#f9eadb;">
+            <span class="task-name">{{ t.name }}</span>
+            <span class="task-score" style="color:#b6491f;">{{ t.score }}</span>
+            <div class="btn-group">
+                <button class="minus" @click="adjust(t, -1)" :disabled="t.count <= 0">−</button>
+                <button @click="adjust(t, 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手机使用区 限制1小时 -->
+    <div class="phone-zone">
+        <div class="phone-stats">
+            <span class="used-display">📱 已用: {{ usedPhone }} 分钟</span>
+            <div>
+                <span class="limit-note">⏳ 剩余可用: {{ Math.max(0, 60 - usedPhone) }}'</span>
+                <button class="reset-used" @click="resetUsed">重置使用</button>
+            </div>
+        </div>
+        <button class="play-btn" @click="playTen" :disabled="availableMinutes < 10 || usedPhone + 10 > 60">
+            🎮 玩10分钟 (消耗10)
+        </button>
+        <div style="text-align:center; margin-top:10px; color:#103f5e; font-weight:500;">✨ 每天最多玩60分钟，好习惯越多玩得越久</div>
+    </div>
+
+    <!-- 操作记录 -->
+    <div class="log-box">
+        <div v-for="(log, idx) in logs" :key="idx" class="log-item">📌 {{ log }}</div>
+        <div v-if="logs.length === 0" style="color:#3b688b;">✨ 记录今日习惯养成</div>
+    </div>
+    <div class="footer-small">
+        <span>💡 基础10分钟 + 奖励 - 惩罚 - 已玩</span>
+        <span>🎯 上限60</span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<script>
+    (function(){
+        const STORAGE_KEY = 'habit_bank_v2';
+
+        // 全新任务体系：包含洗漱、睡觉、起床、礼貌，基础时长10分钟，总上限60
+        const defaultTasks = {
+            homework: [
+                { name: '📖 自觉启动', score: 5, count: 0, key: 'h1' },
+                { name: '⚡ 专注高效', score: 5, count: 0, key: 'h2' },
+                { name: '✨ 质量优秀', score: 8, count: 0, key: 'h3' },   // 微调分值
+                { name: '🔍 自我检查', score: 4, count: 0, key: 'h4' }
+            ],
+            meal: [
+                { name: '🪑 按时就座', score: 2, count: 0, key: 'm1' },
+                { name: '🥢 独立专注', score: 3, count: 0, key: 'm2' },
+                { name: '🍽️ 光盘行动', score: 3, count: 0, key: 'm3' }
+            ],
+            hygiene: [
+                { name: '🧴 早晚刷牙', score: 4, count: 0, key: 'hy1' },
+                { name: '🫧 认真洗脸', score: 3, count: 0, key: 'hy2' },
+                { name: '🚿 按时洗澡', score: 5, count: 0, key: 'hy3' }
+            ],
+            sleep: [
+                { name: '🌙 准时上床', score: 5, count: 0, key: 's1' },
+                { name: '📵 睡前不玩手机', score: 6, count: 0, key: 's2' },
+                { name: '😴 独立入睡', score: 4, count: 0, key: 's3' }
+            ],
+            wakeup: [
+                { name: '⏰ 闹钟响即起', score: 5, count: 0, key: 'w1' },
+                { name: '🛏️ 整理床铺', score: 4, count: 0, key: 'w2' },
+                { name: '😊 不赖床', score: 3, count: 0, key: 'w3' }
+            ],
+            politeness: [
+                { name: '🙋 主动打招呼', score: 4, count: 0, key: 'p1' },
+                { name: '🙏 常说谢谢', score: 3, count: 0, key: 'p2' },
+                { name: '🤗 礼貌用语', score: 3, count: 0, key: 'p3' },
+                { name: '🧏 耐心倾听', score: 4, count: 0, key: 'p4' }
+            ],
+            penalty: [
+                { name: '🐌 写作业磨蹭', score: -5, count: 0, key: 'pe1' },
+                { name: '🍚 吃饭超1小时', score: -5, count: 0, key: 'pe2' },
+                { name: '🧼 不洗漱就睡', score: -6, count: 0, key: 'pe3' },
+                { name: '😤 对长辈不礼貌', score: -8, count: 0, key: 'pe4' },
+                { name: '⏰ 赖床不起', score: -5, count: 0, key: 'pe5' },
+                { name: '📱 睡前偷偷玩', score: -10, count: 0, key: 'pe6' }
+            ]
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if(saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {}
+            }
+            return {
+                tasks: defaultTasks,
+                usedPhone: 0,
+                logs: ["🌱 新习惯银行上线！基础10分钟，上限60分钟"]
+            };
+        }
+
+        const saved = loadData();
+
+        new Vue({
+            el: '#habitBank',
+            data: {
+                baseMinutes: 10,
+                maxDaily: 60,
+                usedPhone: saved.usedPhone || 0,
+                logs: saved.logs || [],
+                tasks: saved.tasks || defaultTasks
+            },
+            computed: {
+                totalEarned: function() {
+                    let sum = 0;
+                    for(let cat in this.tasks) {
+                        this.tasks[cat].forEach(t => sum += (t.score * t.count));
+                    }
+                    return sum;
+                },
+                availableMinutes: function() {
+                    let raw = this.baseMinutes + this.totalEarned - this.usedPhone;
+                    if (raw < 0) raw = 0;
+                    // 但不能超过当日上限 (可用值不能使已用超过60)
+                    if (this.usedPhone + raw > this.maxDaily) {
+                        raw = this.maxDaily - this.usedPhone;
+                    }
+                    return raw < 0 ? 0 : Math.floor(raw);
+                }
+            },
+            watch: {
+                tasks: { handler() { this.saveState(); }, deep: true },
+                usedPhone() { this.saveState(); },
+                logs() { this.saveState(); }
+            },
+            methods: {
+                adjust(task, delta) {
+                    let newCount = task.count + delta;
+                    if (newCount < 0) newCount = 0;
+                    if (delta > 0) {
+                        this.logs.unshift(`✅ 获得: ${task.name} (${task.score>0?'+':''}${task.score})`);
+                    } else if (delta < 0) {
+                        this.logs.unshift(`↩️ 撤回: ${task.name} (${task.score>0?'+':''}${task.score})`);
+                    }
+                    task.count = newCount;
+                    if (this.logs.length > 18) this.logs.pop();
+                },
+                playTen() {
+                    if (this.availableMinutes < 10) {
+                        alert('⛔ 可用时长不足10分钟，先养成好习惯吧');
+                        return;
+                    }
+                    if (this.usedPhone + 10 > this.maxDaily) {
+                        alert(`⛔ 今天最多只能玩${this.maxDaily}分钟，已达到上限`);
+                        return;
+                    }
+                    this.usedPhone += 10;
+                    this.logs.unshift(`🎮 消耗10分钟 · 今日已玩 ${this.usedPhone} 分钟`);
+                },
+                resetUsed() {
+                    this.usedPhone = 0;
+                    this.logs.unshift(`📞 手机使用归零 (手动重置)`);
+                },
+                resetDay() {
+                    for(let cat in this.tasks) {
+                        this.tasks[cat].forEach(t => t.count = 0);
+                    }
+                    this.usedPhone = 0;
+                    this.logs.unshift('🌅 新的一天！基础10分钟已重置，上限60分钟');
+                    if(this.logs.length > 25) this.logs = this.logs.slice(0,25);
+                },
+                saveState() {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                        tasks: this.tasks,
+                        usedPhone: this.usedPhone,
+                        logs: this.logs
+                    }));
+                }
+            },
+            mounted() {
+                if (!this.logs.length) this.logs.push('👋 开始记录好习惯');
+            }
+        });
+    })();
+</script>
+</body>
+</html>
